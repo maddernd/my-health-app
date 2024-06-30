@@ -2,8 +2,13 @@ import { Request, Response } from 'express';
 import Weight from '../models/Weight';
 
 const logWeight = async (req: Request, res: Response) => {
+  const userId = req.user?._id;
+
+  if (!userId) {
+    return res.status(401).json({ message: 'Not authorized' });
+  }
+
   const { weight } = req.body;
-  const userId = req.user._id;
 
   try {
     const newWeight = new Weight({ userId, weight });
@@ -15,7 +20,11 @@ const logWeight = async (req: Request, res: Response) => {
 };
 
 const getWeights = async (req: Request, res: Response) => {
-  const userId = req.user._id;
+  const userId = req.user?._id;
+
+  if (!userId) {
+    return res.status(401).json({ message: 'Not authorized' });
+  }
 
   try {
     const weights = await Weight.find({ userId });

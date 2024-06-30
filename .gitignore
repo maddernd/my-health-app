@@ -1,16 +1,7 @@
-# Node modules
 node_modules/
-
-# Logs
 logs
 *.log
 npm-debug.log*
-
-# Environment variables
 .env
-
-# TypeScript build folder
 dist/
-
-# Miscellaneous
 .DS_Store
