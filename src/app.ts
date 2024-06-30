@@ -1,34 +1,26 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import connectDB from './config/db';
 import authRoutes from './routes/auth';
 import weightRoutes from './routes/weight';
 import exerciseRoutes from './routes/exercise';
-import swaggerJsdoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
+import setupSwagger from './config/swagger';
 
 dotenv.config();
-connectDB();
 
 const app = express();
 
-app.use(cors());
-app.use(express.json());
-
-const swaggerOptions = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'Health Tracking App API',
-      version: '1.0.0',
-    },
-  },
-  apis: ['./src/routes/*.ts'],
+const corsOptions = {
+  origin: '*', 
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 };
 
-const swaggerDocs = swaggerJsdoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use(cors(corsOptions));
+app.use(express.json());
+
+setupSwagger(app);
 
 app.use('/api/auth', authRoutes);
 app.use('/api/weight', weightRoutes);
